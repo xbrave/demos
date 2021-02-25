@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download File Demo</title>
+  </head>
+  <body>
+    <a id="local">click to download local file</a>
+    <br />
+    <a id="remote">click to download remote file</a>
+    <script>
+      function downloadLocal() {
+        const link = document.getElementById('local');
+        link.addEventListener('click', () => {
+          const blob = new Blob(['hello world!'], {
+            type: 'text/plain',
+          });
+          const tempLink = document.createElement('a');
+          tempLink.href = URL.createObjectURL(blob);
+          tempLink.download = 'foo.txt';
+          tempLink.click();
+          tempLink.remove();
+          URL.revokeObjectURL(tempLink.href);
+        });
+      }
+
+      function downloadRemote() {
+        const link = document.getElementById('remote');
+        link.addEventListener('click', () => {
+          fetch(
+            'https://pic2.zhimg.com/v2-3be05963f5f3753a8cb75b6692154d4a_1440w.jpg?source=172ae18b'
+          ).then(response => {
+            response.blob().then(blob => {
+              const tempLink = document.createElement('a');
+              tempLink.href = URL.createObjectURL(blob);
+              tempLink.download = 'remote-picture.jpg';
+              tempLink.click();
+              tempLink.remove();
+              URL.revokeObjectURL(tempLink.href);
+            });
+          });
+        });
+      }
+
+      downloadLocal();
+      downloadRemote();
+    </script>
+  </body>
+</html>
